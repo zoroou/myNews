@@ -8,6 +8,7 @@ import news
 import sys
 
 root = Tkinter.Tk()
+canvas = Tkinter.Canvas(root)
 
 
 @thread.run
@@ -19,7 +20,6 @@ def init_window():
     root.overrideredirect(True)
     root.attributes('-alpha', config.get('root', 'alpha'))
     root.geometry('%sx%s+%s+%s' % (width, height, origin_x, origin_y))
-    canvas = Tkinter.Canvas(root)
     canvas.configure(width=width)
     canvas.configure(height=height)
     canvas.configure(bg='black')
@@ -38,13 +38,23 @@ def init_window():
         x, y = event.x, event.y
     canvas.bind('<B1-Motion>', move)
     canvas.bind('<Button-1>', button_1)
-    init_news(canvas)
 
-    button = Tkinter.Button(canvas, text="close", command=close_window, anchor=Tkinter.W)
-    button.configure(width=10, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
+    button = Tkinter.Button(canvas, text="x", command=close_window, anchor=Tkinter.W)
+    button.configure(width=2, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
+    button.pack(side=Tkinter.TOP)
+
+    init_news()
+
+    button = Tkinter.Button(canvas, text="……", command=(lambda m=Tkinter.ALL: canvas.delete(m)), anchor=Tkinter.W)
+    button.configure(width=4, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
     button.pack(side=Tkinter.BOTTOM)
     news.get_news()
     root.mainloop()
+
+
+def clear_button():
+    canvas.delete(Tkinter.ALL)
+    init_news()
 
 
 def get_news_content():
@@ -57,11 +67,8 @@ def close_window():
     sys.exit(0)
 
 
-def init_news(canvas):
+def init_news():
     hot_news_list = get_news_list('hot.news')
-    button = Tkinter.Button(canvas, text="fresh", command=close_window, anchor=Tkinter.W)
-    button.configure(width=10, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
-    button.pack(side=Tkinter.TOP)
 
     for a in hot_news_list:
         button = Tkinter.Button(canvas, text=a.text, command=get_news_content, anchor=Tkinter.W)
