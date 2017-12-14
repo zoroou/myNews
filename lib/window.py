@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import Tkinter
 import os
-import sys
 from config import config
 import thread
 import lxml.html as html
+import news
+import sys
 
 root = Tkinter.Tk()
 
@@ -42,22 +43,23 @@ def init_window():
     button = Tkinter.Button(canvas, text="close", command=close_window, anchor=Tkinter.W)
     button.configure(width=10, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
     button.pack(side=Tkinter.BOTTOM)
+    news.get_news()
     root.mainloop()
 
 
 def get_news_content():
-    pass
+    print 'test'
 
 
 def close_window():
-    print '--------成功推出程序---------'
     root.quit()
+    print '--------退出程序---------'
     sys.exit(0)
 
 
 def init_news(canvas):
     hot_news_list = get_news_list('hot.news')
-    button = Tkinter.Button(canvas, text="fresh", command=get_news_content, anchor=Tkinter.W)
+    button = Tkinter.Button(canvas, text="fresh", command=close_window, anchor=Tkinter.W)
     button.configure(width=10, activebackground="#000000", background="#000000", fg="white", relief=Tkinter.FLAT)
     button.pack(side=Tkinter.TOP)
 
@@ -84,3 +86,4 @@ def get_news_list(news_type):
 
 def show_start_msg():
     print '窗口初始化完成！'
+
